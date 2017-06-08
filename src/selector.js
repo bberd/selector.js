@@ -11,6 +11,22 @@ var traverseDomAndCollectElements = function(matchFunc, startEl) {
 
   // YOUR CODE HERE
 
+
+
+//solution code
+if (matchFunc(startEl)) {
+  resultSet.push(startEl);
+}
+if (startEl.children.length) {
+  [].slice.call(startEl.children).forEach(function (child) {
+    var matchingElementsStartingAtchild = traverseDomAndCollectElements(matchFunc, child);
+    resultSet = resultSet.concat(matchingElementsStartingAtchild);
+  });
+}
+
+
+
+//our attempt
   //console.log(startEl.children);
     function GoDownTree(startEl) {
 
@@ -18,7 +34,7 @@ var traverseDomAndCollectElements = function(matchFunc, startEl) {
 
 
     if (childArr.length > 0) {
-      traverseDomAndCollectElements(matchFunc, childArr.slice(1));
+      GoDownTree(matchFunc, childArr.slice(1));
       if (matchFunc(childArr[0])) {
         resultSet.push(childArr[0]);
         console.log(resultSet);
@@ -72,13 +88,11 @@ var matchFunctionMaker = function(selector) {
   var selectorType = selectorTypeMatcher(selector);
   var matchFunction;
   if (selectorType === "id") {
-    // define matchFunction for id
     matchFunction = function(element) {
       return element.id === selector.slice(1);
     }
   } else if (selectorType === "class") {
-    // define matchFunction for class
-    matchFunction = function(element) {
+      matchFunction = function(element) {
       for(let i = 0; i < element.className.split(' ').length; i++) {
         if(element.className.split(' ')[i] === selector.slice(1))
           return true;
@@ -86,7 +100,6 @@ var matchFunctionMaker = function(selector) {
       return false;
     }
   } else if (selectorType === "tag.class") {
-    //define matchFunction for tag.class
       matchFunction = function(element) {
 
         let selector1 = selector.split('.');
